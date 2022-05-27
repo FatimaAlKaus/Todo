@@ -33,6 +33,14 @@ namespace WebAPI
             services.AddDbContext<TodoDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("postgres")));
 
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin();
+                    });
+            });
             services.AddScoped<ITodoService, TodoService>();
             services.AddSwaggerGen(c =>
             {
@@ -49,7 +57,25 @@ namespace WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
             }
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
 
+                using (var context = scope.ServiceProvider.GetRequiredService<TodoDbContext>())
+                {
+                    if (context.Database.EnsureCreated())
+                    {
+                        context.Database.EnsureDeleted();
+
+                        context.Database.Migrate();
+                    }
+
+                }
+            }
+            app.UseCors(policy =>
+                        policy
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowAnyOrigin());
             app.UseHttpsRedirection();
 
             app.UseRouting();
