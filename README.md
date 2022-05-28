@@ -1,2 +1,2 @@
 # Todo
-To start app: docker-compose up -d
+To start app: `docker-compose up -d`
