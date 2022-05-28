@@ -1,3 +1,6 @@
 .App {
     text-align: center;
 }
+.Todos::-webkit-scrollbar {
+    display: none;
+}
