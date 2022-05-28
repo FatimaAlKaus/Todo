@@ -46,6 +46,11 @@ namespace WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
             });
+
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "wwwroot";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +82,8 @@ namespace WebAPI
                         .AllowAnyHeader()
                         .AllowAnyOrigin());
             app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
             app.UseRouting();
 
             app.UseAuthorization();
@@ -86,6 +92,8 @@ namespace WebAPI
             {
                 endpoints.MapControllers();
             });
+
+            app.UseSpa(spa => spa.Options.SourcePath = "wwwroot");
         }
     }
 }

@@ -10,7 +10,17 @@ services:
     - .pgdata/:/var/lib/postgresql/data
     ports:
     - "5432:5432"
-    
+
+  server:
+    build: .
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+    - 5001:80
+    links:
+    - db
+
   adminer:
     image: adminer
     restart: always

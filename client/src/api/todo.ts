@@ -1,4 +1,4 @@
-const url = "https://localhost:5001/v1/todo/";
+const url = "http://localhost:5001/v1/todo/";
 
 export const create = async (input: CreateTodoRequest) => {
     await fetch(url, {
